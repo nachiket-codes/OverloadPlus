@@ -18,12 +18,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Deploy to EC2
+      - name: Debug SSH connection
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-            cd ~/OverloadPlus
-            git pull origin main
-            cd OP/backend
-            source venv/bin/activate
-            ./deploy.sh
-          EOF
+          ssh -vvv -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} echo "✅ Connected successfully"
+
