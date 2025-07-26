@@ -20,5 +20,5 @@ jobs:
 
       - name: Debug SSH connection
         run: |
-          ssh -vvv -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} echo "✅ Connected successfully"
+          ssh -vvv -o StrictHostKeyChecking=no ubuntu@13.61.12.61 echo "✅ Connected successfully"
 
