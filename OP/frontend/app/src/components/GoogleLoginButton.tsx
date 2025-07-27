@@ -14,10 +14,10 @@ const GoogleLoginButton = () => {
       const response = await API.post('auth/google', {
         token: credential,
       });
-      console.log(window.location.origin)
       const jwt = response.data.access_token;
       // store JWT in localStorage or Redux
       localStorage.setItem('token', jwt);
+      window.location.href = "/"
     } catch (error) {
       console.error('Google login failed', error);
     }

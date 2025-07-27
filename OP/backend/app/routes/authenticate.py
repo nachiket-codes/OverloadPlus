@@ -60,7 +60,7 @@ def verify_google_token(token: str):
 
 @router.post("/google")
 def google_auth(googleToken: GoogleToken, db: Session = Depends(get_db)):
-    user_info = verify_google_token(GoogleToken.token)
+    user_info = verify_google_token(googleToken.token)
 
     user = db.query(models.User).filter(models.User.email == user_info["email"]).first()
 
@@ -76,44 +76,6 @@ def google_auth(googleToken: GoogleToken, db: Session = Depends(get_db)):
 
     tokenStr = createAccessToken(data = {'sub' : user.username})
     return {"access_token" : tokenStr, "token_type" : "bearer" }
-
-# @router.get('/google')
-# async def loginWithGoogle(request: Request):
-#     redirectUrl = str(request.base_url)[:-1] + str(request.url_for('googleCallback'))
-#     return await oauthG.google.authorize_redirect(request, redirectUrl)
-
-# @router.get('/google/callback')
-# async def googleCallback(request: Request, db: Session = Depends(get_db)):
-#     token = await oauthG.google.authorize_access_token(request)
-
-#     # SAFETY CHECK
-#     if 'id_token' not in token:
-#         return {"error": "id_token missing from Google response", "token": token}
-
-#     try:
-#         user_info = await oauthG.google.parse_id_token(request, token)
-#     except Exception as e:
-#         resp = await oauthG.google.get('userinfo', token=token)
-#         user_info = resp.json()
-#     email = user_info.get("email")
-#     username = user_info.get("name")
-
-#     # Check if user already exists
-#     user = db.query(models.User).filter(models.User.email == email).first()
-#     if not user:
-#         user = models.User(
-#             username = username,
-#             email = email,
-#             provider = "google"
-#         )
-
-#         db.add(user)
-#         db.commit()
-#         db.refresh(user)
-    
-#     # Create JWT token
-#     tokenStr = createAccessToken(data = {'sub' : user.username})
-#     return {"access_token" : tokenStr, "token_type" : "bearer" }
 
 #------------ Forgot pasword -------------------------------------------------------
 @router.post('/forgot-pwd')
