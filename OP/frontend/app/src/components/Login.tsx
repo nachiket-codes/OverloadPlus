@@ -9,8 +9,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
 import { loginUser } from "../features/authenticateSlice";
 import { toast } from "react-toastify";
-
-const GoogleIcon = FcGoogle as any;
+import GoogleLoginButton from "./GoogleLoginButton";
 
 const Login = () => {
     const [username, setUsername] = useState<string>("")
@@ -73,8 +72,8 @@ const Login = () => {
                                     {loading ? "Logging in..." : "Login"}
                             </motion.button>
                             <p className="text-gray-500">or continue with</p>
-                            <div>
-                                <GoogleIcon className="text-5xl cursor-pointer shadow-md p-2 rounded-lg"/>
+                            <div className="flex w-full justify-end items-center">
+                                <GoogleLoginButton/>
                             </div>
                             <div className="w-full text-center sm:hidden">
                                 <p>If you don't have an account</p>

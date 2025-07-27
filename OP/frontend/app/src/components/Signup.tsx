@@ -11,8 +11,6 @@ import { registerUser } from "../features/authenticateSlice";
 import { toast } from "react-toastify";
 import GoogleLoginButton from "./GoogleLoginButton";
 
-const GoogleIcon = FcGoogle as any;
-
 const Signup = () => {
     const [username, setUsername] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -69,7 +67,6 @@ const Signup = () => {
         <div className="w-full h-screen flex flex-col">
             <Header/>
             <div className="p-4 flex-1 flex justify-center">
-                <GoogleLoginButton/>
                 <div className="w-[80%] py-10 font-sans flex">
                     <div className="p-6 min-w-[55%] hidden sm:block">
                         <div className="flex p-6 gap-3 flex-col">
@@ -105,8 +102,8 @@ const Signup = () => {
                                     {isLoading ? 'Adding you...' : 'Register'}
                             </motion.button>
                             <p className="text-gray-500">or continue with</p>
-                            <div>
-                                <GoogleIcon className="text-5xl cursor-pointer shadow-md p-2 rounded-lg"/>
+                            <div className="flex w-full justify-end items-center">
+                                <GoogleLoginButton/>
                             </div>
                             
                             <div className="w-full text-center sm:hidden">
