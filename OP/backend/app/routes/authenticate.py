@@ -10,6 +10,8 @@ import models
 from fastapi.security import OAuth2PasswordRequestForm
 from oauth import oauthG
 import hashingFile
+import emailHandler
+
 
 router = APIRouter(prefix = '/auth', tags = ["Authentication"])
 
@@ -79,16 +81,23 @@ async def googleCallback(request: Request, db: Session = Depends(get_db)):
 #------------ Forgot pasword -------------------------------------------------------
 @router.post('/forgot-pwd')
 async def forgotPassword(userData: ForgotPwdReq, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.email == userData.email).first()
+    user = db.query(models.User).filter(
+        or_(
+            models.User.username == userData.username,
+            models.User.email == userData.username
+        )
+    ).first()
     if not user:
         raise HTTPException(
             status_code = status.HTTP_400_BAD_REQUEST,
             detail = {"message" : "This email is not registered!"}
         )
+    
     tokenStr = createAccessToken(data = {'sub' : user.username})
-    resetPasswordLink = f"http://localhost:3000/reset-password?token={tokenStr}"
-    # sendEmail(email = userData.email, link = resetPasswordLink)
-    return {"message": "Password reset link sent"}
+    if emailHandler.sendResetPwdLink(toEmail = user.email, token = tokenStr):
+        return {"message": "Password reset link sent"}
+    raise HTTPException(status_code = status.HTTP_400_BAD_REQUEST,
+                        detail= {"message" : "Failed to generate and send the reset password link"})
 
 @router.post('/reset-pwd')
 async def resetPassword(resetPwdData: ResetPwdReq, db: Session = Depends(get_db)):

@@ -10,7 +10,11 @@ const Home = () => {
     }, [dispatch])
     const {username, email} = useSelector((state: RootState) => state.authentication.user)
     return (
-        <div>Hello {username}! Welcome to this amazing app. I hope your email is {email} </div>
+        <div className="h-screen w-full flex justify-center items-center">
+            <h1 className="text-2xl font-sans ">
+                Hello {username}! Welcome to Overload Plus. Your email: {email}. You are seeing this page because you are an authorized user.
+            </h1>
+        </div>
     )
 }
 

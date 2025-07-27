@@ -11,7 +11,7 @@ class TokenData(BaseModel):
     username: str | None = None
 
 class ForgotPwdReq(BaseModel):
-    email: str
+    username: str
 
 class ResetPwdReq(BaseModel):
     password: str

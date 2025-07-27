@@ -52,6 +52,25 @@ export const getUser = createAsyncThunk('/getUser', async () => {
     return resp.data;
 })
 
+interface ForgotPwdData {
+    username: string
+}
+
+export const sendLoginLink = createAsyncThunk('/sendloginlink', async (userData: ForgotPwdData) => {
+    const resp = await API.post('/auth/forgot-pwd', userData)
+    return resp.data;
+})
+
+interface ResetPwdData {
+    password: string,
+    token: string
+}
+
+export const resetPassword = createAsyncThunk('/resetpassword', async (resetPwdData: ResetPwdData) => {
+    const resp = await API.post('/auth/reset-pwd', resetPwdData)
+    return resp.data;
+})
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -76,7 +95,7 @@ const authSlice = createSlice({
             state.user.token = token;
             state.user.email = email
             localStorage.setItem('token', token)
-            window.location.href = "/home";
+            window.location.href = "/";
         }).addCase(loginUser.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload as string || "Something went wrong";
@@ -90,7 +109,7 @@ const authSlice = createSlice({
             state.user.token = token;
             state.user.email = email
             localStorage.setItem('token', token)
-            window.location.href = "/home";
+            window.location.href = "/";
         }).addCase(registerUser.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload as string || "Something went wrong";
@@ -107,6 +126,22 @@ const authSlice = createSlice({
         }).addCase(getUser.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload as string || "Something went wrong";
+        }).addCase(sendLoginLink.fulfilled, (state) => {
+            state.loading = false;
+        }).addCase(sendLoginLink.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload as string || "Something went wrong";
+        }).addCase(sendLoginLink.pending, (state, action) => {
+            state.loading = true
+        }).addCase(resetPassword.fulfilled, (state) => {
+            alert("Your password has been reset!")
+            state.loading = false;
+            window.location.href = "/login"
+        }).addCase(resetPassword.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload as string || "Something went wrong";
+        }).addCase(resetPassword.pending, (state) => {
+            state.loading = true
         })
     }
 

@@ -5,16 +5,16 @@ import { motion } from "framer-motion"
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store";
 import { loginUser } from "../features/authenticateSlice";
+import { toast } from "react-toastify";
 
 const GoogleIcon = FcGoogle as any;
 
 const Login = () => {
     const [username, setUsername] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [compError, setCompError] = useState<string>("")
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
 
@@ -22,19 +22,18 @@ const Login = () => {
         e.preventDefault();
         setLoading(true)
         if (!username || !password) {
-            setCompError("All fields are required!")
+            toast.error("All fields are required!")
             return
         }
         try{
             await dispatch(loginUser({username, password})).unwrap()
         } catch (error) {
             console.log(error)
-            setCompError("Logging in failed!");
+            toast.error("Logging in failed!");
         } finally {
             setLoading(false);
         }
         
-        setCompError("")
     }
       
     return (
@@ -64,8 +63,7 @@ const Login = () => {
                             </div>
                             <input type="text" className={inputStyle} value={username} onChange={(e)=>setUsername(e.target.value)}  placeholder="Enter username or email" disabled={loading}/>
                             <input type="password" className={inputStyle} value={password} onChange={(e)=>setPassword(e.target.value)}   placeholder="Password" disabled={loading}/>
-                            <div className="w-full flex justify-end cursor-pointer"><p className="text-gray-500">Forgot passsword?</p></div>
-                            {compError && <p className="text-red-500 font-semibold">{compError}</p>}
+                            <div className="w-full flex justify-end cursor-pointer"><Link to="/forgot-password"><p className="text-gray-500 hover:font-bold">Forgot passsword?</p></Link></div>
                             <motion.button
                                 whileHover={{ scale: 1.02, boxShadow: "0px 0px 12px rgba(59,130,246,0.8)"}}
                                 whileTap={{scale: 0.95}}

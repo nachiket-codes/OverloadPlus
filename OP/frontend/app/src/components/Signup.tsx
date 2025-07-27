@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
 import { registerUser } from "../features/authenticateSlice";
+import { toast } from "react-toastify";
 
 const GoogleIcon = FcGoogle as any;
 
@@ -36,17 +37,17 @@ const Signup = () => {
             return
         }
         setCompError('')
-        // setUsername('')
-        // setEmail('')
-        // setPassword('')
-        // setConfPassword('')
+        setUsername('')
+        setEmail('')
+        setPassword('')
+        setConfPassword('')
         
         try {
             await dispatch(registerUser({ username, email, password })).unwrap();
             // Optionally reset form fields here
         } catch (error) {
             console.log(error)
-            setCompError("Registration failed!");
+            toast.error("Registration failed!");
         } finally {
             setIsLoading(false);
         }
@@ -61,7 +62,7 @@ const Signup = () => {
             setCompError("")
         }
 
-    }, [confPassword])
+    }, [confPassword, password])
 
     return (
         <div className="w-full h-screen flex flex-col">
