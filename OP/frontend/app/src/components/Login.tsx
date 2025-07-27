@@ -72,7 +72,7 @@ const Login = () => {
                                     {loading ? "Logging in..." : "Login"}
                             </motion.button>
                             <p className="text-gray-500">or continue with</p>
-                            <div className="flex w-full justify-end items-center">
+                            <div className="w-[200px] justify-end items-center">
                                 <GoogleLoginButton/>
                             </div>
                             <div className="w-full text-center sm:hidden">
