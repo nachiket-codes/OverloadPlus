@@ -24,7 +24,12 @@ const ResetPassword = () => {
             toast.error("Fields are required!")
             return
         }
-        await dispatch(resetPassword({password, token}))
+        const res = await dispatch(resetPassword({password, token}))
+        if (resetPassword.fulfilled.match(res)) {
+            toast.success("Password successfully reset");
+          } else if (resetPassword.rejected.match(res)) {
+            toast.error(error || "Failed to reset the password");
+        }
     }
 
     useEffect(() => {

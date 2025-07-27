@@ -134,7 +134,6 @@ const authSlice = createSlice({
         }).addCase(sendLoginLink.pending, (state, action) => {
             state.loading = true
         }).addCase(resetPassword.fulfilled, (state) => {
-            alert("Your password has been reset!")
             state.loading = false;
             window.location.href = "/login"
         }).addCase(resetPassword.rejected, (state, action) => {
