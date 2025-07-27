@@ -1,5 +1,5 @@
 import smtplib
-
+from fastapi import HTTPException, status
 from email.message import EmailMessage
 from dotenv import load_dotenv
 import os
@@ -53,4 +53,5 @@ def sendResetPwdLink(toEmail: str, token: str):
         return True
     except Exception as ex:
         print(f"Exception occurred while sending reset password link to user : {ex}")
-        return False
+        raise HTTPException(status_code = status.HTTP_400_BAD_REQUEST,
+                            detail= {"message" : f"Failed to generate and send the reset password link : {ex}"})

@@ -94,10 +94,8 @@ async def forgotPassword(userData: ForgotPwdReq, db: Session = Depends(get_db)):
         )
     
     tokenStr = createAccessToken(data = {'sub' : user.username})
-    if emailHandler.sendResetPwdLink(toEmail = user.email, token = tokenStr):
-        return {"message": "Password reset link sent"}
-    raise HTTPException(status_code = status.HTTP_400_BAD_REQUEST,
-                        detail= {"message" : "Failed to generate and send the reset password link"})
+    emailHandler.sendResetPwdLink(toEmail = user.email, token = tokenStr)
+    return {"message": "Password reset link sent"}
 
 @router.post('/reset-pwd')
 async def resetPassword(resetPwdData: ResetPwdReq, db: Session = Depends(get_db)):

@@ -21,7 +21,6 @@ const ForgotPassword = () => {
             return
         }
         const res = await dispatch(sendLoginLink({username}))
-        toast.success("Link sent!")
         if (sendLoginLink.fulfilled.match(res)) {
             toast.success("Link sent!");
           } else if (sendLoginLink.rejected.match(res)) {
