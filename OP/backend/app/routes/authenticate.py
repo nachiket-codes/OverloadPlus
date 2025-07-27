@@ -11,6 +11,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from oauth import oauthG
 import hashingFile
 import emailHandler
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 
 router = APIRouter(prefix = '/auth', tags = ["Authentication"])
@@ -40,43 +42,78 @@ async def login(loginData: LoginData, db: Session = Depends(get_db)):
     }
     
 # Google auth login -------------------------------------------------------------------------
-@router.get('/google')
-async def loginWithGoogle(request: Request):
-    redirectUrl = str(request.base_url)[:-1] + str(request.url_for('googleCallback'))
-    return await oauthG.google.authorize_redirect(request, redirectUrl)
-
-@router.get('/google/callback')
-async def googleCallback(request: Request, db: Session = Depends(get_db)):
-    token = await oauthG.google.authorize_access_token(request)
-
-    # SAFETY CHECK
-    if 'id_token' not in token:
-        return {"error": "id_token missing from Google response", "token": token}
-
+def verify_google_token(token: str):
     try:
-        user_info = await oauthG.google.parse_id_token(request, token)
-    except Exception as e:
-        resp = await oauthG.google.get('userinfo', token=token)
-        user_info = resp.json()
-    email = user_info.get("email")
-    username = user_info.get("name")
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), os.getenv('GOOGLE_CLIENT_ID'))
 
-    # Check if user already exists
-    user = db.query(models.User).filter(models.User.email == email).first()
+        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            raise HTTPException(status_code=400, detail="Invalid token issuer")
+
+        return {
+            "email": idinfo['email'],
+            "name": idinfo.get('name', ''),
+            "sub": idinfo['sub'],
+        }
+
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid Google token")
+
+@router.post("/google")
+def google_auth(token: str, db: Session = Depends(get_db)):
+    user_info = verify_google_token(token)
+
+    user = db.query(models.User).filter(models.User.email == user_info["email"]).first()
+
     if not user:
         user = models.User(
-            username = username,
-            email = email,
-            provider = "google"
+            email=user_info["email"],
+            username=user_info["name"],
+            provider='google'  # optional field if you want to track
         )
-
         db.add(user)
         db.commit()
         db.refresh(user)
-    
-    # Create JWT token
+
     tokenStr = createAccessToken(data = {'sub' : user.username})
     return {"access_token" : tokenStr, "token_type" : "bearer" }
+
+# @router.get('/google')
+# async def loginWithGoogle(request: Request):
+#     redirectUrl = str(request.base_url)[:-1] + str(request.url_for('googleCallback'))
+#     return await oauthG.google.authorize_redirect(request, redirectUrl)
+
+# @router.get('/google/callback')
+# async def googleCallback(request: Request, db: Session = Depends(get_db)):
+#     token = await oauthG.google.authorize_access_token(request)
+
+#     # SAFETY CHECK
+#     if 'id_token' not in token:
+#         return {"error": "id_token missing from Google response", "token": token}
+
+#     try:
+#         user_info = await oauthG.google.parse_id_token(request, token)
+#     except Exception as e:
+#         resp = await oauthG.google.get('userinfo', token=token)
+#         user_info = resp.json()
+#     email = user_info.get("email")
+#     username = user_info.get("name")
+
+#     # Check if user already exists
+#     user = db.query(models.User).filter(models.User.email == email).first()
+#     if not user:
+#         user = models.User(
+#             username = username,
+#             email = email,
+#             provider = "google"
+#         )
+
+#         db.add(user)
+#         db.commit()
+#         db.refresh(user)
+    
+#     # Create JWT token
+#     tokenStr = createAccessToken(data = {'sub' : user.username})
+#     return {"access_token" : tokenStr, "token_type" : "bearer" }
 
 #------------ Forgot pasword -------------------------------------------------------
 @router.post('/forgot-pwd')

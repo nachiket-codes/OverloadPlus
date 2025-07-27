@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
 import { registerUser } from "../features/authenticateSlice";
 import { toast } from "react-toastify";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 const GoogleIcon = FcGoogle as any;
 
@@ -68,6 +69,7 @@ const Signup = () => {
         <div className="w-full h-screen flex flex-col">
             <Header/>
             <div className="p-4 flex-1 flex justify-center">
+                <GoogleLoginButton/>
                 <div className="w-[80%] py-10 font-sans flex">
                     <div className="p-6 min-w-[55%] hidden sm:block">
                         <div className="flex p-6 gap-3 flex-col">
