@@ -16,3 +16,6 @@ class ForgotPwdReq(BaseModel):
 class ResetPwdReq(BaseModel):
     password: str
     token: str
+
+class GoogleToken(BaseModel):
+    token: str

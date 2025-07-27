@@ -4,7 +4,7 @@ from database import get_db
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from hashingFile import verify
-from schemas import LoginData, ForgotPwdReq, ResetPwdReq
+from schemas import LoginData, ForgotPwdReq, ResetPwdReq, GoogleToken
 from authentication import createAccessToken, verifyAccessToken
 import models
 from fastapi.security import OAuth2PasswordRequestForm
@@ -59,8 +59,8 @@ def verify_google_token(token: str):
         raise HTTPException(status_code=400, detail="Invalid Google token")
 
 @router.post("/google")
-def google_auth(token: str, db: Session = Depends(get_db)):
-    user_info = verify_google_token(token)
+def google_auth(googleToken: GoogleToken, db: Session = Depends(get_db)):
+    user_info = verify_google_token(GoogleToken.token)
 
     user = db.query(models.User).filter(models.User.email == user_info["email"]).first()
 
