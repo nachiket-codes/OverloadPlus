@@ -10,8 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout backend only
         uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            OP/backend
+          sparse-checkout-cone-mode: false
 
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.8.0
