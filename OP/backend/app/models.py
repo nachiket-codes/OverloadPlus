@@ -16,7 +16,7 @@ class User(Base):
     provider = Column(String, default="local")
     createdAt = Column(DateTime, default = datetime.utcnow)
 
-    splits = relationship("Split", back_populates = "user", cascase = "all, delete-orphan")
+    splits = relationship("Split", back_populates = "user", cascade = "all, delete-orphan")
     workouts = relationship("Workout", back_populates = "user", cascade = "all, delete-orphan")
     progressMetrics = relationship("ProgressMetric", back_populates = "user", cascade = "all, delete-orphan")
 
@@ -67,7 +67,7 @@ class WorkoutExercise(Base):
     id = Column(String(36), primary_key = True, nullable = False, default = lambda: str(uuid.uuid4()))
     orderInWorkout = Column(Integer)
     exerciseId = Column(String(36), ForeignKey("exercise.id"), nullable = False)
-    setId = Column(String(36), ForeignKey = ("set.id"), nullable = False)
+    setId = Column(String(36), ForeignKey("set.id"), nullable = False)
 
     workout = relationship("Workout", back_populates = "workoutExercises")
     exercise = relationship("Exercise", back_populates = "workoutExercises")
@@ -91,8 +91,8 @@ class ProgressMetric(Base):
 
     id = Column(String(36), primary_key = True, nullable = False, default = lambda: str(uuid.uuid4()))
 
-    userId = Column(Integer, ForeignKey('user.id'), nullable=False)
-    exerciseId = Column(Integer, ForeignKey('exercise.id'), nullable=False)
+    userId = Column(String(36), ForeignKey('user.id'), nullable=False)
+    exerciseId = Column(String(36), ForeignKey('exercise.id'), nullable=False)
     date = Column(DateTime, nullable=False)
     maxWeight = Column(Float)
     totalVolume = Column(Float)

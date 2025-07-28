@@ -16,7 +16,8 @@ Base.metadata.create_all(bind = engine)
 app.add_middleware(SessionMiddleware, secret_key = os.getenv('SUPER_SECRET'))
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = ["*"],
+    allow_origins = ["http://localhost:3000",               # Dev
+                    "https://www.overloadplus.fun"],
     allow_credentials = True,
     allow_headers = ["*"],
     allow_methods = ["*"]

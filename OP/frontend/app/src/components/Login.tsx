@@ -5,8 +5,8 @@ import { motion } from "framer-motion"
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
 import { loginUser } from "../features/authenticateSlice";
 import { toast } from "react-toastify";
 import GoogleLoginButton from "./GoogleLoginButton";
@@ -14,23 +14,20 @@ import GoogleLoginButton from "./GoogleLoginButton";
 const Login = () => {
     const [username, setUsername] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [loading, setLoading] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
+    const { loading, error } = useSelector((state: RootState) => state.authentication)
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true)
         if (!username || !password) {
             toast.error("All fields are required!")
             return
         }
         try{
             await dispatch(loginUser({username, password})).unwrap()
-        } catch (error) {
-            console.log(error)
-            toast.error("Logging in failed!");
-        } finally {
-            setLoading(false);
+        } catch (err) {
+            console.log(err)
+            toast.error(error);
         }
         
     }
@@ -60,15 +57,15 @@ const Login = () => {
                             <div className="w-full">
                                 <h1 className="text-4xl font-semibold">Sign in</h1>
                             </div>
-                            <input type="text" className={inputStyle} value={username} onChange={(e)=>setUsername(e.target.value)}  placeholder="Enter username or email" disabled={loading}/>
-                            <input type="password" className={inputStyle} value={password} onChange={(e)=>setPassword(e.target.value)}   placeholder="Password" disabled={loading}/>
+                            <input type="text" className={inputStyle} value={username} onChange={(e)=>setUsername(e.target.value)}  placeholder="Enter username or email" disabled={loading || false}/>
+                            <input type="password" className={inputStyle} value={password} onChange={(e)=>setPassword(e.target.value)}   placeholder="Password" disabled={loading || false}/>
                             <div className="w-full flex justify-end cursor-pointer"><Link to="/forgot-password"><p className="text-gray-500 hover:font-bold">Forgot passsword?</p></Link></div>
                             <motion.button
                                 whileHover={{ scale: 1.02, boxShadow: "0px 0px 12px rgba(59,130,246,0.8)"}}
                                 whileTap={{scale: 0.95}}
                                 transition={{ease:'easeInOut'}}
                                 className={btnStyle}
-                                disabled={loading}>
+                                disabled={loading || false}>
                                     {loading ? "Logging in..." : "Login"}
                             </motion.button>
                             <p className="text-gray-500">or continue with</p>

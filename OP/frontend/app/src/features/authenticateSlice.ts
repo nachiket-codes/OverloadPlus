@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import API from "../api";
+import { AxiosError } from "axios";
 
 interface User {
     id: string | null,
@@ -31,9 +32,21 @@ interface LoginData {
     password: string
 }
 
-export const loginUser = createAsyncThunk('/login', async (loginData: LoginData) => {
-    const resp = await API.post('/auth/login', loginData)
-    return resp.data;
+export const loginUser = createAsyncThunk('/login', async (loginData: LoginData, { rejectWithValue }) => {
+    try {
+        const resp = await API.post('/auth/login', loginData);
+        return resp.data;
+      } catch (err) {
+        const error = err as AxiosError;
+  
+        // Handle FastAPI HTTPException detail
+        if (error.response && error.response.data) {
+          // This assumes FastAPI returns: {"detail": "Some error message"}
+          return rejectWithValue((error.response.data as any).detail);
+        }
+  
+        return rejectWithValue('Login failed');
+      }
 })
 
 interface RegisterData {
@@ -98,7 +111,7 @@ const authSlice = createSlice({
             window.location.href = "/";
         }).addCase(loginUser.rejected, (state, action) => {
             state.loading = false
-            state.error = action.payload as string || "Something went wrong";
+            state.error = (action.payload as { message: string })?.message || "Something went wrong";
         }).addCase(registerUser.pending, (state, action) => {
             state.loading = true
         }).addCase(registerUser.fulfilled, (state, action) => {
