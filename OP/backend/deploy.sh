@@ -1,29 +1,37 @@
 #!/bin/bash
 
-# Exit on any error
-set -e
+echo "==> Starting deployment script..."
 
-echo "🚀 Starting deployment..."
+# Step 1: Navigate to app directory
+echo "==> Navigating to app directory..."
+cd app || { echo "❌ Failed to change directory to app"; exit 1; }
 
-# Step 1: Activate virtual environment
-source ~/OverloadPlus/OP/backend/venv/bin/activate
+# Step 2: Activate virtual environment
+echo "==> Activating virtual environment..."
+source ../venv/bin/activate || { echo "❌ Failed to activate virtual environment"; exit 1; }
 
-# Step 2: Navigate to app directory
-cd ~/OverloadPlus/OP/backend/app
+# Step 3: Install dependencies
+echo "==> Installing Python dependencies..."
+pip install -r ../requirements.txt || { echo "❌ Failed to install dependencies"; exit 1; }
 
-# Step 3: Load environment variables
-export $(grep -v '^#' .env | xargs)
+# Step 4: Run Alembic migrations
+echo "==> Running Alembic migrations..."
+alembic upgrade head || { echo "❌ Alembic migration failed"; exit 1; }
 
-# Step 4: Install/update dependencies
-pip install -r ../requirements.txt
+# Step 5: Kill existing Uvicorn processes
+echo "==> Killing existing uvicorn processes (if any)..."
+pkill -f "uvicorn" && echo "✅ Killed existing uvicorn processes" || echo "⚠️ No uvicorn process found"
 
-# Step 5: Run Alembic migrations
-alembic upgrade head
+# Step 6: Start Uvicorn
+echo "==> Starting Uvicorn server..."
+nohup uvicorn main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
 
-# Step 6: Stop old Uvicorn process (if running)
-pkill -f "uvicorn app.main:app" || echo "No existing Uvicorn process found."
+# Final message
+if [ $? -eq 0 ]; then
+  echo "✅ Uvicorn started successfully!"
+else
+  echo "❌ Failed to start Uvicorn"
+  exit 1
+fi
 
-# Step 7: Start FastAPI app with Uvicorn (in background)
-nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
-
-echo "✅ Deployment complete!"
+echo "==> Deployment script finished."
