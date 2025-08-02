@@ -1,6 +1,5 @@
 backend/venv/
 node_modules/
-
 backend/.env
 frontend/node_modules/
 backend/app/routes/__pycache__
