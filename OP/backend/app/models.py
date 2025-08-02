@@ -59,7 +59,7 @@ class Exercise(Base):
     instructions = Column(Text)
 
     workoutExercises = relationship("WorkoutExercise", back_populates = "exercise")
-    progressMetrics = relationship("ProgressMetrics", back_populates = "exercise")
+    progressMetrics = relationship("ProgressMetric", back_populates = "exercise")
 
 class WorkoutExercise(Base):
     __tablename__ =  "workoutExercise"
@@ -67,12 +67,12 @@ class WorkoutExercise(Base):
     id = Column(String(36), primary_key = True, nullable = False, default = lambda: str(uuid.uuid4()))
     orderInWorkout = Column(Integer)
     exerciseId = Column(String(36), ForeignKey("exercise.id"), nullable = False)
-    setId = Column(String(36), ForeignKey("set.id"), nullable = False)
+    workoutId = Column(String(36), ForeignKey("workout.id"), nullable = False)
 
     workout = relationship("Workout", back_populates = "workoutExercises")
     exercise = relationship("Exercise", back_populates = "workoutExercises")
 
-    sets = relationship("Set", back_populates = "workoutExercise", cascade="all, delete-orphan")
+    sets = relationship("Set", back_populates = "workoutExercise")
 
 class Set(Base):
     __tablename__ =  "set"
@@ -83,8 +83,9 @@ class Set(Base):
     reps = Column(Integer, nullable = False)
     rpe = Column(Float)
     weightUnit = Column(String(10), nullable = False)
+    workoutExerciseId = Column(String(36), ForeignKey('workoutExercise.id'), nullable = False)
 
-    workoutExercise = relationship("WorkoutExercise", back_populates = "set")
+    workoutExercise = relationship("WorkoutExercise", back_populates = "sets")
 
 class ProgressMetric(Base):
     __tablename__ =  "progressMetric"

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-    baseURL:  'https://api.overloadplus.fun'
+    baseURL:  'https://api.overloadplus.fun'//'http://localhost:8000'//
 })
 
 // To send token while requesting

@@ -2,3 +2,5 @@ backend/venv/
 node_modules/
 frontend/node_modules/
 backend/.env
+backend/app/routes/__pycache__
+backend/app/alembic/__pycache__
