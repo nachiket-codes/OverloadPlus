@@ -19,3 +19,23 @@ class ResetPwdReq(BaseModel):
 
 class GoogleToken(BaseModel):
     token: str
+
+# --------------SPLIT------------------------
+class SplitReq(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+class SplitUpdateReq(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+
+#--------------------WORKOUT-----------------
+class WorkoutReq(BaseModel):
+    name: str
+    note: Optional[str] = None
+    workoutDate: Optional[datetime] = None
+
+class WorkoutUpdateReq(BaseModel):
+    name: Optional[str] = None
+    note: Optional[str] = None
+    workoutDate: Optional[datetime] = None
