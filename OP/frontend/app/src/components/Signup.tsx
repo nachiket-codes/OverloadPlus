@@ -65,7 +65,7 @@ const Signup = () => {
 
     return (
         <div className="w-full h-screen flex flex-col">
-            <Header/>
+            <Header hideNav={true}/>
             <div className="p-4 flex-1 flex justify-center">
                 <div className="w-[80%] py-10 font-sans flex">
                     <div className="p-6 min-w-[55%] hidden sm:block">

@@ -108,7 +108,7 @@ const authSlice = createSlice({
             state.user.token = token;
             state.user.email = email
             localStorage.setItem('token', token)
-            window.location.href = "/";
+            window.location.href = "/dashboard";
         }).addCase(loginUser.rejected, (state, action) => {
             state.loading = false
             state.error = (action.payload as { message: string })?.message || "Something went wrong";
@@ -122,7 +122,7 @@ const authSlice = createSlice({
             state.user.token = token;
             state.user.email = email
             localStorage.setItem('token', token)
-            window.location.href = "/";
+            window.location.href = "/dashboard";
         }).addCase(registerUser.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload as string || "Something went wrong";

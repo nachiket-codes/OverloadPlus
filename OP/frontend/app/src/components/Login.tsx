@@ -2,7 +2,6 @@ import Header from "./Header"
 import figurine from '../assets/images/figurine.png'
 import { btnStyle, inputStyle } from "../data/constants"
 import { motion } from "framer-motion"
-import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +14,7 @@ const Login = () => {
     const [username, setUsername] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const dispatch = useDispatch<AppDispatch>()
-    const { loading, error } = useSelector((state: RootState) => state.authentication)
+    const { loading, error, user } = useSelector((state: RootState) => state.authentication)
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,7 +33,7 @@ const Login = () => {
       
     return (
         <div className="w-full h-screen flex flex-col">
-            <Header/>
+            <Header hideNav={true}/>
             <div className="p-4 flex-1 flex justify-center">
                 <div className="w-[80%] py-10 font-sans flex">
                     <div className="p-6 min-w-[55%] hidden sm:block">
