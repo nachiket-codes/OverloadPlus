@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import Login from './components/Login';
 import SplashScreen from './components/SplashScreen';
@@ -36,6 +36,7 @@ function App() {
         <BrowserRouter>
         <div className="pb-[140px]">
             <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Signup />} />
               <Route path="/dashboard" element={<Home />} />

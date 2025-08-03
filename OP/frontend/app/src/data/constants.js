@@ -7,6 +7,6 @@ export const btnStyle = "bg-primary text-white text-xl w-full rounded-md h-[62px
 export const navItems = [
     { label: 'Dashboard', id: 'dashboard', logo: faHouse},
     { label: 'Splits', id: 'split', logo: faDumbbell},
-    { label: 'Log Workout', id: 'log', logo: faClipboardList},
+    { label: 'Log', id: 'log', logo: faClipboardList},
     { label: 'Profile', id: 'profile', logo: faUser},
   ];
