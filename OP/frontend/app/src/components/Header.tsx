@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ activePage = 'a', hideNav = false }) =>
 
   return (
     <>
-      <div className="w-full h-16 p-6 flex items-center justify-between">
+      <div className="w-full h-16 p-6 flex items-center justify-between shadow-md">
         <img className="h-10 hidden sm:block" src={logoText} alt="Logo Text" />
         <img className="h-10 sm:hidden" src={logo} alt="Logo" />
         
