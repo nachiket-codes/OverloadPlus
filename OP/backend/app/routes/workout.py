@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from schemas import WorkoutReq, WorkoutUpdateReq
 from database import get_db
-from commonRouterMethods import getCompleteUser
+from routes.commonRouterMethods import getCompleteUser
 from oauth import get_user
 from sqlalchemy.orm import Session
 import models

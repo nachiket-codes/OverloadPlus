@@ -4,7 +4,7 @@ from database import get_db
 from schemas import SplitReq, SplitUpdateReq
 from sqlalchemy.orm import Session
 import models
-from commonRouterMethods import getCompleteUser
+from routes.commonRouterMethods import getCompleteUser
 
 router = APIRouter(prefix = "/split", tags = ["Split"])
 
@@ -24,7 +24,7 @@ async def createSplit(splitData: SplitReq, currentUser = Depends(get_user), db :
 
 # EDIT A SPLIT
 @router.put('/{splitId}')
-async def editSplit(splitId: str, splitData: SplitUpdateReq, currentUser = Depends(get_user), db: Session = (get_db)):
+async def editSplit(splitId: str, splitData: SplitUpdateReq, currentUser = Depends(get_user), db: Session = Depends(get_db)):
     user = getCompleteUser(currentUser = currentUser, db = db)
     split = db.query(models.Split).filter(models.Split.id == splitId).first()
     if not split:

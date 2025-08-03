@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from oauth import get_user
 from database import get_db
-from commonRouterMethods import getCompleteUser
+from routes.commonRouterMethods import getCompleteUser
 from sqlalchemy.orm import Session
 import models
 
-router = APIRouter(prefix = "exercise", tags = ["Exercise"])
+router = APIRouter(prefix = "/exercise", tags = ["Exercise"])
 
 # Get all exercises
 @router.get('/')
