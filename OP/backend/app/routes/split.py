@@ -43,7 +43,13 @@ async def editSplit(splitId: str, splitData: SplitUpdateReq, currentUser = Depen
 @router.get('/')
 async def getSplits(currentUser = Depends(get_user), db : Session = Depends(get_db)):
     user = getCompleteUser(currentUser = currentUser, db = db)
-    return user.splits
+    splits = (
+        db.query(models.Split)
+        .filter(models.Split.userId == user.id)
+        .order_by(models.Split.createdAt.desc())
+        .all()
+    )
+    return splits
 
 # GET A SPLIT
 @router.get('/{splitId}')

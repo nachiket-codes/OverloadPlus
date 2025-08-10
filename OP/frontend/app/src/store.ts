@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from './features/authenticateSlice'
+import splitReducer from './features/splitSlice'
 
 export const store = configureStore({
     reducer : {
-        authentication : authReducer
+        authentication : authReducer,
+        splits: splitReducer
     }
 })
 
