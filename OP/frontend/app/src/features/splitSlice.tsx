@@ -6,6 +6,7 @@ interface Split {
     id: string
     name: string
     description: string
+    workouts: WorkoutObj[]
 }
 interface InitialState {
     splits: Split[]
@@ -19,9 +20,14 @@ const initialState: InitialState = {
     error: ""
 }
 
+interface  WorkoutObj {
+    name: string
+}
+
 interface SplitData {
     name: string
     description: string
+    workouts : WorkoutObj[]
 }
 
 export const addSplit = createAsyncThunk('split/add', async (splitData: SplitData, { rejectWithValue }) => {
@@ -53,6 +59,21 @@ export const getSplits = createAsyncThunk('split/get', async (_, {rejectWithValu
     }
 })
 
+export const deleteSplits = createAsyncThunk('split/delete', async (id: string, {rejectWithValue}) => {
+    try {
+        const resp = await API.delete(`split/${id}`)
+        return resp.data
+    }
+    catch (err) {
+        const error = err as AxiosError;
+
+        if (error.response && error.response.data){
+            return rejectWithValue((error.response.data as any).detail)
+        }
+        return rejectWithValue("Failed to delete the split")
+    }
+})
+
 const SplitSlice = createSlice({
     name: "split",
     initialState,
@@ -73,6 +94,13 @@ const SplitSlice = createSlice({
         }).addCase(getSplits.rejected, (state, action) => {
             state.loading = false;
             state.error = (action.payload as { message: string})?.message || "Could not get the splits"
+        }).addCase(deleteSplits.fulfilled, (state) => {
+            state.loading = false
+        }).addCase(deleteSplits.pending, (state) => {
+            state.loading = true
+        }).addCase(deleteSplits.rejected, (state, action) => {
+            state.loading = false;
+            state.error = (action.payload as { message: string})?.message || "Could not delete the split"
         })
     }
 
