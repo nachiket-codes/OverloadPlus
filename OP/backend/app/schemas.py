@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 class LoginData(BaseModel):
@@ -22,15 +22,6 @@ class ResetPwdReq(BaseModel):
 class GoogleToken(BaseModel):
     token: str
 
-# --------------SPLIT------------------------
-class SplitReq(BaseModel):
-    name: str
-    description: Optional[str] = None
-
-class SplitUpdateReq(BaseModel):
-    name: Optional[str] = None
-    description: Optional[str] = None
-
 #--------------------WORKOUT-----------------
 class WorkoutReq(BaseModel):
     name: str
@@ -41,3 +32,13 @@ class WorkoutUpdateReq(BaseModel):
     name: Optional[str] = None
     note: Optional[str] = None
     workoutDate: Optional[datetime] = None
+
+# --------------SPLIT------------------------
+class SplitReq(BaseModel):
+    name: str
+    description: Optional[str] = None
+    workouts: Optional[List[WorkoutReq]] = []
+
+class SplitUpdateReq(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
