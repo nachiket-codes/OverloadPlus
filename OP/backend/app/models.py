@@ -39,7 +39,7 @@ class Workout(Base):
     name = Column(String(100), nullable = False)
     note = Column(Text)
     createdAt = Column(DateTime, default = datetime.utcnow)
-    workoutDate = Column(DateTime, nullable=False)
+    workoutDate = Column(DateTime, default = datetime.utcnow)
     userId = Column(String(36), ForeignKey("user.id"), nullable = False)
     splitId = Column(String(36), ForeignKey("split.id"), nullable = False)
 
@@ -101,5 +101,6 @@ class ProgressMetric(Base):
 
     user = relationship("User", back_populates="progressMetrics")
     exercise = relationship("Exercise", back_populates="progressMetrics")
+
 
 
