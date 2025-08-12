@@ -69,7 +69,7 @@ const AddSplitModal: React.FC<propType> = ({closeFunc}) => {
 
     return (
         <div className="w-full h-screen fixed top-0 left-0 flex justify-center items-center" onClick={closeFunc}>
-            <motion.div className="w-[80%] bg-white shadow-md p-4 rounded-md" onClick={(e) => e.stopPropagation()}
+            <motion.div className="w-[80%] bg-white shadow-md p-4 rounded-md border" onClick={(e) => e.stopPropagation()}
                 initial={{scale:0}}
                 animate={{scale:[0.8, 1.1, 1]}}
                 exit={{scale:[1, 1.1, 0]}}

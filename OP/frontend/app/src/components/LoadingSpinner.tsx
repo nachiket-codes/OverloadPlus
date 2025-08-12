@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const LoadingSpinner = () => {
     return (
-        <div className="fixed top-0 left-0">
+        <div className="w-full h-full p-6 flex items-center justify-center">
             <FontAwesomeIcon icon={faDumbbell}  className="animate-spin "/>
         </div>
     )

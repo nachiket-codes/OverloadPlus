@@ -4,7 +4,7 @@ import Login from './components/Login';
 import SplashScreen from './components/SplashScreen';
 import { useState, useEffect } from 'react'
 import Signup from './components/Signup';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, easeInOut } from 'framer-motion';
 import { Provider } from 'react-redux'
 import { store } from './store';
 import Home from './components/FPages/Home';
@@ -18,9 +18,31 @@ import Profile from './components/FPages/Profile';
 import { navItems } from './data/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import BottomNav from './components/BottomNav';
+import {motion} from 'framer-motion'
 
 function App() {
   const [showSplash, setShowSplash] = useState<boolean>(true)
+  const [showNav, setShowNav] = useState<boolean>(true)
+  const [lastScrollY, setLastScrollY] = useState<number>(0)
+
+  useEffect(()=>{
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      if (scrollY > lastScrollY && scrollY > 50) {
+        setShowNav(false)
+      }
+      else {
+        setShowNav(true)
+      }
+      setLastScrollY(scrollY)
+
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -47,8 +69,25 @@ function App() {
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </div>
-          <BottomNav/>
+          <AnimatePresence>
+            {
+              showNav && (
+                <motion.div
+              initial={{scaleY:0}}
+              animate={{scaleY:1}}
+              exit={{scaleY:0}}
+              transition={{duration:0.3, ease: easeInOut}}>
+                <BottomNav/>
+              </motion.div>
+              )
+            }
+            
+          </AnimatePresence>
+          
+          
           <ToastContainer position="top-center" autoClose={3000} />
+        
+        
         </BrowserRouter>
       </Provider>
       {/* Splash screen overlay with slide-out animation */}

@@ -8,6 +8,7 @@ import { addSplit, getSplits } from "../../features/splitSlice";
 import { AppDispatch, RootState } from "../../store";
 import { toast } from "react-toastify";
 import { addAWorkout, deleteWorkout, editWorkout, getWorkouts } from "../../features/WorkoutSlice";
+import LoadingSpinner from "../LoadingSpinner";
 
 
 interface Split {
@@ -71,7 +72,7 @@ const SplitModal: React.FC<{id:string, closeFunc: ()=> void}> = ({id,  closeFunc
 
     return (
         <div className="w-full h-screen fixed top-0 left-0 flex justify-center items-center"  onClick={closeFunc} >
-            <motion.div className="w-[80%] bg-white shadow-md p-4 rounded-md" onClick={(e) => e.stopPropagation()}
+            <motion.div className="w-[80%] bg-white shadow-md p-4 rounded-md border" onClick={(e) => e.stopPropagation()}
                 initial={{scale:0}}
                 animate={{scale:[0.8, 1.1, 1]}}
                 exit={{scale:[1, 1.1, 0]}}
@@ -87,59 +88,67 @@ const SplitModal: React.FC<{id:string, closeFunc: ()=> void}> = ({id,  closeFunc
                     <h1 className="text-[16px] text-black mb-2">Your workout days for this split</h1>
                      <div className="flex flex-col gap-4 mb-4">
                         {
-                            workouts.map((workout, idx) => {
-                                return (
-                                    <div className="w-full flex items-center gap-1">
-                                        <motion.div
-                                            whileHover={{scale:1.05}}
-                                            whileTap={{scale: 0.95}}
-                                            transition={{duration:0.2, ease: easeInOut}}>
-                                            <FontAwesomeIcon onClick={(e)=>deleteWorkoutDay(e, workout.id)} icon={faTrash} className="bg-white text-primary hover:text-red-500 cursor-pointer"/>
-                                        </motion.div>
-                                        {
-                                            (editWorkoutId === workout.id) ?
-                                            (<form onSubmit={(e)=> editWorkoutName(e, workout.id)} className="w-full flex">
-                                                <input className="bg-[#f0efff] h-[42px] p-4 outline-none w-full rounded-md" value={editWorkoutDayName} onClick={(e)=>{e.stopPropagation()}} onChange={(e)=>setEditWorkoutDayName(e.target.value)}/>
+                            loading ? 
+                            (<LoadingSpinner/>) :
+                            (
+                                
+                                    workouts.map((workout, idx) => {
+                                        return (
+                                            <div className="w-full flex items-center gap-1">
+                                                <motion.div
+                                                    whileHover={{scale:1.05}}
+                                                    whileTap={{scale: 0.95}}
+                                                    transition={{duration:0.2, ease: easeInOut}}>
+                                                    <FontAwesomeIcon onClick={(e)=>deleteWorkoutDay(e, workout.id)} icon={faTrash} className="bg-white text-primary hover:text-red-500 cursor-pointer"/>
+                                                </motion.div>
                                                 {
-                                                    (editWorkoutDayName !== workout.name) && 
-                                                    (
-                                                        <div className="flex items-center p-2">
-                                                            <motion.button
-                                                                whileHover = {{scale:1.05}}
-                                                                whileTap={{scale:0.95, color:'red'}}
-                                                                transition={{ease:easeInOut, duration:0.2}}
-                                                                onClick={(e)=>setEditWorkoutDayName(workout.name)}
-                                                                type="button"
-                                                                >
-                                                                <FontAwesomeIcon icon={faXmark} className="hover:text-red-500"/>
-                                                            </motion.button>
-                                                            <motion.button
-                                                                whileHover = {{scale:1.05}}
-                                                                whileTap={{scale:0.95, color:'blue'}}
-                                                                transition={{ease:easeInOut, duration:0.2}}
-                                                                type="submit"
-                                                                >
-                                                                <FontAwesomeIcon icon={faCheck} className="hover:text-blue-500"/>
-                                                            </motion.button>
-                                                        </div>
-                                                    )
+                                                    (editWorkoutId === workout.id) ?
+                                                    (<form onSubmit={(e)=> editWorkoutName(e, workout.id)} className="w-full flex">
+                                                        <input className="bg-[#f0efff] h-[42px] p-4 outline-none w-full rounded-md" value={editWorkoutDayName} onClick={(e)=>{e.stopPropagation()}} onChange={(e)=>setEditWorkoutDayName(e.target.value)}/>
+                                                        {
+                                                            (editWorkoutDayName !== workout.name) && 
+                                                            (
+                                                                <div className="flex items-center p-2">
+                                                                    <motion.button
+                                                                        whileHover = {{scale:1.05}}
+                                                                        whileTap={{scale:0.95, color:'red'}}
+                                                                        transition={{ease:easeInOut, duration:0.2}}
+                                                                        onClick={(e)=>setEditWorkoutDayName(workout.name)}
+                                                                        type="button"
+                                                                        >
+                                                                        <FontAwesomeIcon icon={faXmark} className="hover:text-red-500"/>
+                                                                    </motion.button>
+                                                                    <motion.button
+                                                                        whileHover = {{scale:1.05}}
+                                                                        whileTap={{scale:0.95, color:'blue'}}
+                                                                        transition={{ease:easeInOut, duration:0.2}}
+                                                                        type="submit"
+                                                                        >
+                                                                        <FontAwesomeIcon icon={faCheck} className="hover:text-blue-500"/>
+                                                                    </motion.button>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </form>):
+                                                    (<h1 className="shadow-md cursor-pointer h-[42px] p-4 outline-none w-full rounded-md flex items-center font-semibold cursor-pointer" onClick={(e)=>{e.stopPropagation(); setEditWorkoutId(workout.id); setEditWorkoutDayName(workout.name)}} >{workout.name} </h1>)
                                                 }
-                                            </form>):
-                                            (<h1 className="shadow-md cursor-pointer h-[42px] p-4 outline-none w-full rounded-md flex items-center font-semibold cursor-pointer" onClick={(e)=>{e.stopPropagation(); setEditWorkoutId(workout.id); setEditWorkoutDayName(workout.name)}} >{workout.name} </h1>)
-                                        }
-                                    </div>
-                                )
-                            })
+                                            </div>
+                                        )
+                                    })
+                                
+                            )
                         }
+                        
                         <div className="w-full flex items-center gap-1">
                         <form className="w-full flex items-center gap-2" onSubmit={addWorkoutDayName} >
                             <input className="bg-[#f0efff] h-[42px] p-4 outline-none w-full rounded-md" value={workoutDayName} onChange={(e)=>setWorkoutDayName(e.target.value)} placeholder="New workout day name"/>
-                            <motion.div
+                            <motion.button
                                 whileHover={{scale:1.05}}
                                 whileTap={{scale: 0.95}}
-                                transition={{duration:0.2, ease: easeInOut}}>
-                                <FontAwesomeIcon icon={faPlus} className="p-2 bg-primary border shadow-md border-primary text-white hover:bg-white hover:text-primary rounded-md cursor-pointer"/>
-                            </motion.div>
+                                transition={{duration:0.2, ease: easeInOut}}
+                                type = "submit">
+                                <FontAwesomeIcon icon={faPlus} className="p-2 bg-primary border shadow-md border-primary text-white hover:bg-white hover:text-primary rounded-md cursor-pointer" />
+                            </motion.button>
                         </form>
                         </div>
                     </div>                     
