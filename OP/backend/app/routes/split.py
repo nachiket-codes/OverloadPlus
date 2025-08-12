@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from oauth import get_user
 from database import get_db
-from schemas import SplitReq, SplitUpdateReq
+from schemas import SplitReq, SplitUpdateReq, WorkoutReq
 from sqlalchemy.orm import Session
+from typing import List
 import models
 from routes.commonRouterMethods import getCompleteUser
 
@@ -12,6 +13,7 @@ router = APIRouter(prefix = "/split", tags = ["Split"])
 @router.post('/')
 async def createSplit(splitData: SplitReq, currentUser = Depends(get_user), db : Session = Depends(get_db)):
     user = getCompleteUser(currentUser = currentUser, db = db)
+    
     newSplit = models.Split(
         name = splitData.name,
         description = splitData.description,
@@ -20,6 +22,12 @@ async def createSplit(splitData: SplitReq, currentUser = Depends(get_user), db :
     db.add(newSplit)
     db.commit()
     db.refresh(newSplit)
+
+    for workout in splitData.workouts:
+        newWrkOut = models.Workout(name = workout.name, userId = user.id, splitId = newSplit.id)
+        db.add(newWrkOut)
+        db.commit()
+        db.refresh(newWrkOut)
     return newSplit
 
 # EDIT A SPLIT
@@ -75,6 +83,11 @@ async def deleteSplit(splitId: str, db: Session = Depends(get_db), currentUser =
             status_code = status.HTTP_404_NOT_FOUND,
             detail = {"message" : f"Split with id : {splitId} not found"}
         )
+    
+    for workout in split.workouts:
+        db.delete(workout)
+        db.commit()
+
     db.delete(split)
     db.commit()
     return {
