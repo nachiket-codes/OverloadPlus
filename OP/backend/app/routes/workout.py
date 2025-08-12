@@ -46,13 +46,13 @@ async def editWorkout(splitId: str, workoutId: str, workoutData: WorkoutUpdateRe
     
 # Delete a day
 @router.delete('/{splitId}/{workoutId}')
-async def deleteWorkout(splitId: str, workoutId: str, currentUser = Depends(get_user), db: Session = Depends(get_user)):
+async def deleteWorkout(splitId: str, workoutId: str, currentUser = Depends(get_user), db: Session = Depends(get_db)):
     user = getCompleteUser(currentUser = currentUser, db = db)
     workout = db.query(models.Workout).filter(models.Workout.id == workoutId,
                                               models.Workout.userId == user.id,
                                               models.Workout.splitId == splitId).first()
     db.delete(workout)
-    db.refresh()
+    db.commit()
     return {
         "message" : f"Successfully deleted workout with id: {workoutId}"
     }
