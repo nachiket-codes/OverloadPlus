@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from './features/authenticateSlice'
 import splitReducer from './features/splitSlice'
+import workoutReducer from './features/WorkoutSlice'
 
 export const store = configureStore({
     reducer : {
         authentication : authReducer,
-        splits: splitReducer
+        splits: splitReducer,
+        workouts: workoutReducer
     }
 })
 
