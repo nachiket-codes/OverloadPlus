@@ -1,5 +1,7 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import logo from '../assets/images/logo.png'
 import { motion } from 'framer-motion'
+import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
 
 const SplashScreen = ({ onComplete }: {onComplete: () => void}) => {
     return (
@@ -12,12 +14,14 @@ const SplashScreen = ({ onComplete }: {onComplete: () => void}) => {
                 if (onComplete) onComplete();
             }}
             >
-                <motion.img 
+                <FontAwesomeIcon icon={faDumbbell} className='text-3xl text-primary animate-spin'/>
+                {/* <motion.img 
                     animate = {{scale: [1, 1.2, 1]}}
                     transition={{ duration:1.2, repeat: Infinity, ease: 'easeInOut' }}
-                    className="w-20" src={logo} alt="" />
+                    className="w-20" src={logo} alt="" /> */}
         </motion.div>
     )
 }
+
 
 export default SplashScreen;
