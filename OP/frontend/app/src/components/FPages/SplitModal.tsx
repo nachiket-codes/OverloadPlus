@@ -92,7 +92,7 @@ const SplitModal: React.FC<{id:string, closeFunc: ()=> void}> = ({id,  closeFunc
                             (<LoadingSpinner/>) :
                             (
                                 
-                                    workouts.map((workout, idx) => {
+                                    workouts.slice().reverse().map((workout, idx) => {
                                         return (
                                             <div className="w-full flex items-center gap-1">
                                                 <motion.div
@@ -161,3 +161,4 @@ const SplitModal: React.FC<{id:string, closeFunc: ()=> void}> = ({id,  closeFunc
 
 
 export default SplitModal;
+
