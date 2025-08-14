@@ -80,7 +80,7 @@ const Splits = () => {
                                         </div>
                                         {
                                             optionOpenId === item.id && (
-                                                <div className="shadow-xl absolute right-0 top-2 p-2 rounded-md bg-white flex  z-50">
+                                                <div className="border z-[100] shadow-xl absolute right-0 top-2 p-2 rounded-md bg-white flex  z-50">
                                                     <ul className="p-2 flex flex-col gap-2">
                                                         <li className="m-1 hover:text-red-500 cursor-pointer"> <FontAwesomeIcon icon={faTrash} onClick={(e)=>deleteSplit(e, item.id)}/> Delete</li>
                                                         <li className="m-1 hover:text-blue-500 cursor-pointer"><FontAwesomeIcon icon={faCheck}/> Set as active</li>
