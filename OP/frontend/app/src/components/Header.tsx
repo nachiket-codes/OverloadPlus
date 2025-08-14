@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faDumbbell, faXmark } from '@fortawesome/free-solid-svg-icons';
 import logoText from '../assets/images/logo-text.png';
 import logo from '../assets/images/logo.png';
 import { useState } from 'react';
@@ -18,7 +18,8 @@ const Header: React.FC<HeaderProps> = ({ activePage = 'a', hideNav = false }) =>
     <>
       <div className="w-full h-16 p-6 flex items-center justify-between shadow-md">
         <img className="h-10 hidden sm:block" src={logoText} alt="Logo Text" />
-        <img className="h-10 sm:hidden" src={logo} alt="Logo" />
+        <FontAwesomeIcon icon={faDumbbell} className="sm:hidden text-2xl text-white bg-primary p-2 rounded-full rotate-45 shadow-md hover:rotate-180 transition-transform duration-300" />
+        {/* <img className="h-10 sm:hidden" src={logo} alt="Logo" /> */}
         
         {
             !hideNav && (
