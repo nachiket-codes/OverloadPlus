@@ -61,9 +61,13 @@ async def deleteWorkout(splitId: str, workoutId: str, currentUser = Depends(get_
 @router.get('/{splitId}')
 async def getAllWorkouts(splitId: str, db: Session = Depends(get_db), currentUser = Depends(get_user)):
     user = getCompleteUser(currentUser = currentUser, db = db)
-    split = db.query(models.Split).filter(models.Split.id == splitId,
-                                          models.Split.userId == user.id).first()
-    return split.workouts
+    workouts = (
+            db.query(models.Workout)
+            .filter(models.Workout.userId == user.id, models.Workout.splitId == splitId)
+            .order_by(models.Workout.createdAt)
+            .all()
+        )
+    return workouts
 
 # get a day
 @router.get('/{splitId}/{workoutId}')
@@ -80,4 +84,5 @@ async def getAWorkout(splitId: str, workoutId: str, db: Session = Depends(get_db
             }
         )
     return workout
+
 
