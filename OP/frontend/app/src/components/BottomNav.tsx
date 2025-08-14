@@ -7,7 +7,7 @@ const BottomNav = () => {
     const location = useLocation();
     const currentPath = location.pathname.split('/')[1]; // get 'dashboard' from '/dashboard'
     return (
-        <div className={`w-full h-[150px] fixed bottom-0 p-4 flex sm:hidden ${['login', 'register'].includes(currentPath) && 'hidden'}`}>
+        <div className={`w-full z-[2] h-[150px] fixed bottom-0 p-4 flex sm:hidden ${['login', 'register'].includes(currentPath) && 'hidden'}`}>
             <div className='w-full bg-white flex-1 rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.3)] flex'>
                 {
                 navItems.map((item) => {
