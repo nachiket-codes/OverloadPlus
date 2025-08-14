@@ -7,7 +7,7 @@ interface Prop {
 const BackDrop: React.FC<Prop> = ({unselectionFunc}) => {
     return (
         <motion.div
-        className="w-full h-screen fixed top-0 left-0"
+        className="w-full h-screen fixed top-0 left-0 z-[50]"
         onClick={unselectionFunc}
         initial={{ backdropFilter: "blur(0px)" }}
         animate={{ backdropFilter: "blur(8px)" }}
