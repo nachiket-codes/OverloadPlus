@@ -71,7 +71,7 @@ const SplitModal: React.FC<{id:string, closeFunc: ()=> void}> = ({id,  closeFunc
     }
 
     return (
-        <div className="w-full h-screen fixed top-0 left-0 flex justify-center items-center"  onClick={closeFunc} >
+        <div className="z-[100] w-full h-screen fixed top-0 left-0 flex justify-center items-center"  onClick={closeFunc} >
             <motion.div className="w-[80%] bg-white shadow-md p-4 rounded-md border" onClick={(e) => e.stopPropagation()}
                 initial={{scale:0}}
                 animate={{scale:[0.8, 1.1, 1]}}
@@ -130,7 +130,7 @@ const SplitModal: React.FC<{id:string, closeFunc: ()=> void}> = ({id,  closeFunc
                                                             )
                                                         }
                                                     </form>):
-                                                    (<h1 className="shadow-md cursor-pointer h-[42px] p-4 outline-none w-full rounded-md flex items-center font-semibold cursor-pointer" onClick={(e)=>{e.stopPropagation(); setEditWorkoutId(workout.id); setEditWorkoutDayName(workout.name)}} >{workout.name} </h1>)
+                                                    (<h1 className="truncate border shadow-md cursor-pointer h-[42px] p-4 outline-none w-full rounded-md flex items-center font-semibold cursor-pointer" onClick={(e)=>{e.stopPropagation(); setEditWorkoutId(workout.id); setEditWorkoutDayName(workout.name)}} >{workout.name} </h1>)
                                                 }
                                             </div>
                                         )
@@ -158,5 +158,6 @@ const SplitModal: React.FC<{id:string, closeFunc: ()=> void}> = ({id,  closeFunc
         </div>
     )
 }
+
 
 export default SplitModal;
