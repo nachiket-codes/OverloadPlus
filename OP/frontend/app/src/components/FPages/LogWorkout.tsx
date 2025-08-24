@@ -36,6 +36,7 @@ const LogWorkout = () => {
         if (selectedSplitId) {
             dispatch(getWorkouts(selectedSplitId))
         }
+        setSelectedWorkoutId('')
     }, [selectedSplitId])
 
     return (
