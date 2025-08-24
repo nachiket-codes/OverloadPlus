@@ -6,6 +6,7 @@ import { AppDispatch, RootState } from "../../store";
 import { getSplits } from "../../features/splitSlice";
 import { Link } from "react-router-dom";
 import { getWorkouts } from "../../features/WorkoutSlice";
+import AddExerciseSection from "./AddExerciseSection";
 
 const LogWorkout = () => {
     const [curDate, setCurDate] = useState<Date | undefined>(new Date())
@@ -24,6 +25,12 @@ const LogWorkout = () => {
             setSelectedSplitId(splits[0].id)
         }
     }, [splits])
+
+    useEffect(()=>{
+        if (workouts.length > 0){
+            setSelectedWorkoutId(workouts[0].id)
+        }
+    }, [workouts])
 
     useEffect(()=>{
         if (selectedSplitId) {
@@ -77,6 +84,9 @@ const LogWorkout = () => {
                                 </div>
                             </div>
                         )
+                    }
+                    {
+                        selectedWorkoutId ? <AddExerciseSection/> : <p>Please select your split and workout day</p>
                     }
                     
                    
