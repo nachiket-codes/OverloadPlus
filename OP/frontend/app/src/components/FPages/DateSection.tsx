@@ -11,7 +11,10 @@ interface Prop {
 }
 const DateSection: React.FC<Prop> = ({curDate, setCurDate}) => {
     const [showCalendar, setShowCalendar] = useState<boolean>(false)
-
+    
+    useEffect(()=>{
+        setShowCalendar(false)
+    }, [curDate])
 
     return (
         <div className="flex flex-col">
@@ -52,5 +55,6 @@ const DateSection: React.FC<Prop> = ({curDate, setCurDate}) => {
         </div>
     )
 }
+
 
 export default DateSection;
