@@ -102,7 +102,7 @@ const AddExerciseModal: React.FC<propType> = ({closeFunc, setAddedExerciseIds, e
                     <input type="text" placeholder="Search exercise" value={searchTxt} onChange={(e)=>setSearchTxt(e.target.value)} className="bg-[#f0efff] h-[40px] p-4 outline-none w-full rounded-md" />
 
                 </form>
-                <div className="border-b">
+                <div className={`${!showFilter && 'border-b'}`}>
                 <div className="p-2 text-xl font-semibold flex items-center justify-between">
                     <div className="flex items-center gap-2 cursor-pointer"  onClick={(e)=>setShowFilter(!showFilter)}>
                         <h1>{`${showFilter ? 'Close filter' : 'Show filter'}`}</h1>
@@ -125,9 +125,9 @@ const AddExerciseModal: React.FC<propType> = ({closeFunc, setAddedExerciseIds, e
                     {
                         showFilter && 
                             <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
+                                initial={{ scaleY: 0, opacity: 0 }}
+                                animate={{ scaleY: [0.8, 1.1, 1], opacity: 1 }}
+                                exit={{ scaleY: [1, 1.1, 0.8], opacity: 0 }}
                                 transition={{ duration: 0.2, ease: 'easeInOut' }}
                                 className="overflow-hidden bg-gray-100 p-2 rounded-xl flex flex-col gap-2">
 
